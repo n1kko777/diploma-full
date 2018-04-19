@@ -8,6 +8,7 @@ window.addEventListener('DOMContentLoaded', function() {
     let overlay = document.querySelector('.overlay'),
         popupBtn = document.querySelector('#popup-btn'),
         main = document.querySelector('.main'),
+        mainCards,
         custom = document.querySelector('.custom'),
         customInfo = document.querySelector('.custom-info'),
         customChar = document.querySelector('.custom-char'),
@@ -371,8 +372,8 @@ window.addEventListener('DOMContentLoaded', function() {
             skinClothes: '',
             skinShoes: ''
         },
-        numberCount = document.querySelectorAll('.result-count'),
-        progressCount = document.querySelectorAll('.progress-bar'),
+        numberCount,
+        progressCount,
         countValue = 0;
 
     /*Проверка правильности заполнения полей*/
@@ -394,6 +395,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     /*Анулирование результатов*/
     function clearCount() {
+        countValue = 0;
         for (let i = 0; i < numberCount.length; i++) {
             numberCount[i].textContent = countValue + '%';
             progressCount[i].style.height = countValue + '%';
@@ -522,7 +524,12 @@ window.addEventListener('DOMContentLoaded', function() {
             newCondidate.appendChild(document.createTextNode('Биография'));
             newCondidate.appendChild(bio);
 
-
+            mainCards = document.querySelectorAll('.main-cards-item');
+            numberCount = document.querySelectorAll('.result-count');
+            progressCount = document.querySelectorAll('.progress-bar');
+            for (let i = 0; i < mainCards.length; i++) {
+                mainCards[i].classList.remove('main-cards-item-active');
+            }
 
             /*Анулирование результатов*/
             clearCount();
@@ -535,6 +542,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
     reset.addEventListener('click', function() {
         document.querySelector('.main-cards').removeChild(newCondidate);
+        mainCards[0].classList.remove('rollIn');
+        mainCards[1].classList.remove('rollIn');
+        mainCards[2].classList.remove('rollIn');
 
         disappear(main);
         appear(custom, 'flex');
@@ -560,8 +570,61 @@ window.addEventListener('DOMContentLoaded', function() {
         bio.setAttribute('placeholder', '');
     });
 
+    /*Провести честное голосование*/
+    let voting = document.querySelector('#voting');
+    
+    voting.addEventListener('click', function () {
+        let max = 0;
+        for (let i = 0; i < mainCards.length; i++) {
+            mainCards[i].classList.remove('main-cards-item-active');
+        }
 
+        let rnd = 101;
+        countValue = 0;
+        rnd = Math.floor(Math.random() * rnd);
+        
+        numberCount[0].textContent = rnd + '%';
+        progressCount[0].style.height = rnd + '%';
+        setTimeout(() => {
+          mainCards[0].classList.add('rollIn');
+        }, 100);
+        mainCards[0].classList.remove('rollIn');
 
+        countValue = rnd;
 
+        rnd = 100 - rnd;
+        
+        rnd = Math.floor(Math.random() * rnd);
+
+        numberCount[1].textContent = rnd + '%';
+        progressCount[1].style.height = rnd + '%';
+        setTimeout(() => {
+          mainCards[1].classList.add('rollIn');
+        }, 350);
+        mainCards[1].classList.remove('rollIn');
+
+        rnd = 100 - rnd - countValue;
+        
+        numberCount[2].textContent = rnd + '%';
+        progressCount[2].style.height = rnd + '%';
+        setTimeout(() => {
+          mainCards[2].classList.add('rollIn');
+        }, 500);
+        mainCards[2].classList.remove('rollIn');
+    
+    });
+
+    /*Вмешаться в выборы*/
+    let crime = document.querySelector('#crime');
+
+    crime.addEventListener('click', function () {
+        setTimeout(() => {
+          mainCards[2].classList.add('rollIn');
+          countValue = countValue + 25;
+          numberCount[2].textContent = countValue + '%';
+          progressCount[2].style.height = countValue + '%';
+        }, 300);
+        mainCards[2].classList.remove('rollIn');
+    });
 
 });
