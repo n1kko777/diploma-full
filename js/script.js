@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     /*Глобальные переменные*/
-    let color, hair, clothes, valEnd;
+    let color, hair, clothes, valEnd, newCondidate;
 
 
     /*Обработка модального окна*/
@@ -23,11 +23,11 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     /*Появление блоков*/
-    function appear(elem) {
+    function appear(elem, display) {
         elem.style.transition = 'all 1s ease';
         elem.style.opacity = 1;
         setTimeout(() => {
-            elem.style.display = 'block';
+            elem.style.display = '' + display + '';
         }, 1000);
     }
 
@@ -37,11 +37,11 @@ window.addEventListener('DOMContentLoaded', function() {
         disappear(overlay);
         disappear(main);
 
-        custom.style.display = 'flex';
+        appear(custom, 'flex');
 
-        appear(customInfo);
-        appear(customChar);
-        appear(customStyle);
+        appear(customInfo, 'block');
+        appear(customChar, 'block');
+        appear(customStyle, 'block');
 
 
         defaultMale();
@@ -68,6 +68,11 @@ window.addEventListener('DOMContentLoaded', function() {
         hair = 1;
         clothes = 1;
         valEnd = 2;
+        for (let i = 0; i < skinColor.length; i++) {
+            skinColor[i].style.display = 'none';
+        }
+        skinColor[0].style.display = 'block';
+
         personSkin.style.backgroundImage = 'url(../img/skin/skin-' + color + '.png)';
         personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + clothes + '.png)';
         personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + hair + '.png)';
@@ -88,6 +93,11 @@ window.addEventListener('DOMContentLoaded', function() {
         hair = 1;
         clothes = 1;
         valEnd = 5;
+        for (let i = 0; i < skinColor.length; i++) {
+            skinColor[i].style.display = 'none';
+        }
+        skinColor[0].style.display = 'block';
+
         personSkin.style.backgroundImage = 'url(../img/skin/skin-' + (color + 3) + '.png)';
         personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
         personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
@@ -103,19 +113,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
     /*Оработчик смены полов*/
     sex[0].addEventListener('click', () => {
-        for (let i = 0; i < skinColor.length; i++) {
-            skinColor[i].style.display = 'none';
-        }
         skinColor[0].style.display = 'block';
         if (sex[0].checked) {
             defaultMale();
         }
     });
     sex[1].addEventListener('click', () => {
-        for (let i = 0; i < skinColor.length; i++) {
-            skinColor[i].style.display = 'none';
-        }
-        skinColor[0].style.display = 'block';
         if (sex[1].checked) {
             defaultFemale();
         }
@@ -367,7 +370,10 @@ window.addEventListener('DOMContentLoaded', function() {
             skinHair: '',
             skinClothes: '',
             skinShoes: ''
-        };
+        },
+        numberCount = document.querySelectorAll('.result-count'),
+        progressCount = document.querySelectorAll('.progress-bar'),
+        countValue = 0;
 
     /*Проверка правильности заполнения полей*/
     name.addEventListener('keyup', function(event) {
@@ -384,6 +390,15 @@ window.addEventListener('DOMContentLoaded', function() {
             age.setAttribute('placeholder', 'Допускается только цифры!');
         }
     });
+
+
+    /*Анулирование результатов*/
+    function clearCount() {
+        for (let i = 0; i < numberCount.length; i++) {
+            numberCount[i].textContent = countValue + '%';
+            progressCount[i].style.height = countValue + '%';
+        }
+    }
 
     /*Обработчик нажатия кнопки "готово"*/
     ready.addEventListener('click', function() {
@@ -433,10 +448,10 @@ window.addEventListener('DOMContentLoaded', function() {
             bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
 
             disappear(custom);
-            appear(main);
+            appear(main, 'block');
 
             /*Формирование карточки кандидата*/
-            let newCondidate = document.createElement('div');
+            newCondidate = document.createElement('div');
             newCondidate.classList.add('main-cards-item');
             newCondidate.classList.add('rollIn');
             document.querySelector('.main-cards').appendChild(newCondidate);
@@ -506,9 +521,45 @@ window.addEventListener('DOMContentLoaded', function() {
             newCondidate.appendChild(views);
             newCondidate.appendChild(document.createTextNode('Биография'));
             newCondidate.appendChild(bio);
+
+
+
+            /*Анулирование результатов*/
+            clearCount();
         }
 
     });
+
+    /*Сброс результатов*/
+    let reset = document.querySelector('#reset');
+
+    reset.addEventListener('click', function() {
+        document.querySelector('.main-cards').removeChild(newCondidate);
+
+        disappear(main);
+        appear(custom, 'flex');
+
+        appear(customInfo, 'block');
+        appear(customChar, 'block');
+        appear(customStyle, 'block');
+
+        defaultMale();
+        sex[0].checked = true;
+        name.value = '';
+        name.style.cssText = "border: none;";
+        name.setAttribute('placeholder', '');
+
+        age.value = '';
+        age.style.cssText = "border: none;";
+        age.setAttribute('placeholder', '');
+
+        select.selectedIndex = 0;
+
+        bio.value = '';
+        bio.style.cssText = "border: none;";
+        bio.setAttribute('placeholder', '');
+    });
+
 
 
 
