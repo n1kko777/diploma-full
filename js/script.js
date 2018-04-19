@@ -378,14 +378,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     /*Проверка правильности заполнения полей*/
     name.addEventListener('keyup', function(event) {
-        if (this.value.search(/[a-zA-Z0-9]/i) + 1) {
+        if ((this.value.search(/[a-zA-Z0-9]/i) + 1)) {
             name.value = '';
             name.style.cssText = "border: 1px solid red;";
             name.setAttribute('placeholder', 'Допускается только кирилица!');
         }
     });
     age.addEventListener('keyup', function(event) {
-        if (isNaN(this.value)) {
+        this.value = parseInt(this.value);
+        if ( isNaN(this.value) ) {
             age.value = '';
             age.style.cssText = "border: 1px solid red;";
             age.setAttribute('placeholder', 'Допускается только цифры!');
@@ -411,8 +412,8 @@ window.addEventListener('DOMContentLoaded', function() {
             name.style.cssText = "border: 1px solid red;";
             name.setAttribute('placeholder', 'Заполните данное поле!!!');
         }
-        if (age.value != '' && age.value.trim().length > 0 && !isNaN(age.value) && age.value > 0 && age.value < 100) {
-            condidateInfo.age = age.value;
+        if (age.value != '' && age.value.trim().length > 0 && !isNaN(age.value) && parseInt(age.value) > 18 && parseInt(age.value) < 100) {
+            condidateInfo.age = parseInt(age.value);
         } else {
             age.value = '';
             age.style.cssText = "border: 1px solid red;";
@@ -446,7 +447,7 @@ window.addEventListener('DOMContentLoaded', function() {
         /*Перенос информации о кондидате в карточку*/
         if (name.value != '' && name.value.trim().length > 0 &&
             age.value != '' && age.value.trim().length > 0 &&
-            !isNaN(age.value) && age.value > 0 && age.value < 100 &&
+            !isNaN(age.value) && parseInt(age.value) > 18 && parseInt(age.value) < 100 &&
             bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
 
             disappear(custom);
@@ -604,7 +605,8 @@ window.addEventListener('DOMContentLoaded', function() {
         mainCards[1].classList.remove('rollIn');
 
         rnd = 100 - rnd - countValue;
-        
+        countValue = rnd;
+
         numberCount[2].textContent = rnd + '%';
         progressCount[2].style.height = rnd + '%';
         setTimeout(() => {
@@ -620,7 +622,13 @@ window.addEventListener('DOMContentLoaded', function() {
     crime.addEventListener('click', function () {
         setTimeout(() => {
           mainCards[2].classList.add('rollIn');
-          countValue = countValue + 25;
+          if ((countValue + 25) >= 100) {
+            countValue = 100;
+            alert('Поздравляем с победой на Выборах!!');
+            location.reload();
+          } else {
+            countValue = countValue + 25;
+          }
           numberCount[2].textContent = countValue + '%';
           progressCount[2].style.height = countValue + '%';
         }, 300);
