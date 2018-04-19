@@ -378,11 +378,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     /*Проверка правильности заполнения полей*/
     name.addEventListener('keyup', function(event) {
-        if ((this.value.search(/[a-zA-Z0-9]/i) + 1)) {
-            name.value = '';
-            name.style.cssText = "border: 1px solid red;";
-            name.setAttribute('placeholder', 'Допускается только кирилица!');
-        }
+        this.value = this.value.replace(/[^а-яА-ЯЁё ]/i, "");
     });
     age.addEventListener('keyup', function(event) {
         this.value = parseInt(this.value);
@@ -557,8 +553,6 @@ window.addEventListener('DOMContentLoaded', function() {
         defaultMale();
         sex[0].checked = true;
         name.value = '';
-        name.style.cssText = "border: none;";
-        name.setAttribute('placeholder', '');
 
         age.value = '';
         age.style.cssText = "border: none;";
