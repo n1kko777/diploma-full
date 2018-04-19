@@ -1,7 +1,10 @@
 window.addEventListener('DOMContentLoaded', function() {
 
-    let color, hair, clothes, valStart, valEnd;
+    /*Глобальные переменные*/
+    let color, hair, clothes, valEnd;
 
+
+    /*Обработка модального окна*/
     let overlay = document.querySelector('.overlay'),
         popupBtn = document.querySelector('#popup-btn'),
         main = document.querySelector('.main'),
@@ -10,6 +13,7 @@ window.addEventListener('DOMContentLoaded', function() {
         customChar = document.querySelector('.custom-char'),
         customStyle = document.querySelector('.custom-style');
 
+    /*Исчезновение блоков*/
     function disappear(elem) {
         elem.style.transition = 'all 1s ease';
         elem.style.opacity = 0;
@@ -18,6 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
+    /*Появление блоков*/
     function appear(elem) {
         elem.style.transition = 'all 1s ease';
         elem.style.opacity = 1;
@@ -26,7 +31,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
-    
+    /*Обработчик кнопки "Создать"*/
     popupBtn.addEventListener('click', (e) => {
 
         disappear(overlay);
@@ -44,6 +49,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
 
+    /*Собираем модель президента*/
     let personSkin = document.querySelector('.person-skin'),
         personClothes = document.querySelector('.person-clothes'),
         personHair = document.querySelector('.person-hair'),
@@ -53,14 +59,16 @@ window.addEventListener('DOMContentLoaded', function() {
         hairStyle = document.querySelectorAll('.hair-style'),
         clothesStyle = document.querySelectorAll('.clothes-style');
 
-        personShoes.style.backgroundImage = 'url(../img/clothes/construct/shoes.png)';
+    personShoes.style.backgroundImage = 'url(../img/clothes/construct/shoes.png)';
+
+    /*Начальный мужской скелет*/
     function defaultMale() {
+
         color = 1;
         hair = 1;
         clothes = 1;
-        valStart = 1;
         valEnd = 2;
-        personSkin.style.backgroundImage = 'url(../img/skin/skin-' + valStart + '.png)';
+        personSkin.style.backgroundImage = 'url(../img/skin/skin-' + color + '.png)';
         personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + clothes + '.png)';
         personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + hair + '.png)';
 
@@ -73,15 +81,16 @@ window.addEventListener('DOMContentLoaded', function() {
         clothesStyle[0].style.display = 'block';
     }
 
+    /*Начальный женский скелет*/
     function defaultFemale() {
+
         color = 1;
-        hair = 4;
-        clothes = 4;
-        valStart = 4;
+        hair = 1;
+        clothes = 1;
         valEnd = 5;
-        personSkin.style.backgroundImage = 'url(../img/skin/skin-' + valStart + '.png)';
-        personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + clothes + '.png)';
-        personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + hair + '.png)';
+        personSkin.style.backgroundImage = 'url(../img/skin/skin-' + (color + 3) + '.png)';
+        personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
+        personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
 
         for (let i = 0; i < hairStyle.length; i++) {
             hairStyle[i].style.display = 'none';
@@ -92,6 +101,7 @@ window.addEventListener('DOMContentLoaded', function() {
         clothesStyle[3].style.display = 'block';
     }
 
+    /*Оработчик смены полов*/
     sex[0].addEventListener('click', () => {
         for (let i = 0; i < skinColor.length; i++) {
             skinColor[i].style.display = 'none';
@@ -112,45 +122,113 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
 
+    /*Переключатели слайдеров*/
     let next = document.querySelectorAll('.next'),
         prev = document.querySelectorAll('.prev');
 
-
-    function addItems(parent, pos) {
-        parent.children[pos].style.display = 'none';
-        parent.children[pos + 1].style.display = 'block';
-        pos++;
-    }
+    /*Смещение вправо элемента в карусели*/
     for (let i = 0; i < next.length; i++) {
         next[i].addEventListener('click', function() {
             let parent = document.querySelector('.' + this.parentElement.getAttribute('class'));
-
             switch (i) {
                 case 0:
-                    if (color <= 2) {
-                        addItems(parent, color);
+                    if (color < 3) {
+                        parent.children[color].style.display = 'none';
+                        parent.children[color + 1].style.display = 'block';
                         color++;
                         if (valEnd == 5) {
-                            personSkin.style.backgroundImage = 'url(../img/skin/skin-' + (color + 3) + '.png)';
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + (color + 3) + '.png)';
                         } else {
-                            personSkin.style.backgroundImage = 'url(../img/skin/skin-' + color + '.png)';
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + color + '.png)';
                         }
+                    } else if (color == 3) {
+                        parent.children[color].style.display = 'none';
+                        color = 1;
+                        parent.children[color].style.display = 'block';
 
-
+                        if (valEnd == 5) {
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + (color + 3) + '.png)';
+                        } else {
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + color + '.png)';
+                        }
                     }
                     break;
                 case 1:
-                    if (hair <= valEnd) {
-                        addItems(parent, hair);
-                        hair++;
-                        personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + hair + '.png)';
+                    if (hair < 3) {
+                        if (valEnd == 5) {
+                            parent.children[(hair + 3)].style.display = 'none';
+                            parent.children[(hair + 3) + 1].style.display = 'block';
+                            hair++;
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
+                        } else {
+                            parent.children[hair].style.display = 'none';
+                            parent.children[hair + 1].style.display = 'block';
+                            hair++;
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + hair + '.png)';
+                        }
+                    } else if (hair == 3) {
+                        if (valEnd == 5) {
+                            parent.children[(hair + 3)].style.display = 'none';
+                            hair = 1;
+                            parent.children[(hair + 3)].style.display = 'block';
+
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
+                        } else {
+                            parent.children[hair].style.display = 'none';
+                            hair = 1;
+                            parent.children[hair].style.display = 'block';
+
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + hair + '.png)';
+                        }
                     }
                     break;
                 case 2:
-                    if (clothes <= valEnd) {
-                        addItems(parent, clothes);
-                        clothes++;
-                        personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                    if (clothes < 3) {
+                        if (valEnd == 5) {
+                            parent.children[(clothes + 3)].style.display = 'none';
+                            parent.children[(clothes + 3) + 1].style.display = 'block';
+                            clothes++;
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
+                        } else {
+                            parent.children[clothes].style.display = 'none';
+                            parent.children[clothes + 1].style.display = 'block';
+                            clothes++;
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                        }
+                    } else if (clothes == 3) {
+                        if (valEnd == 5) {
+                            parent.children[(clothes + 3)].style.display = 'none';
+                            clothes = 1;
+                            parent.children[(clothes + 3)].style.display = 'block';
+
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
+                        } else {
+                            parent.children[clothes].style.display = 'none';
+                            clothes = 1;
+                            parent.children[clothes].style.display = 'block';
+
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                        }
                     }
                     break;
                 default:
@@ -160,40 +238,109 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-    function removeItem(parent, pos) {
-        parent.children[pos].style.display = 'none';
-        parent.children[pos - 1].style.display = 'block';
-        pos--;
-    }
+    /*Смещение влево элемента в карусели*/
     for (let i = 0; i < prev.length; i++) {
         prev[i].addEventListener('click', function() {
             let parent = document.querySelector('.' + this.parentElement.getAttribute('class'));
             switch (i) {
                 case 0:
                     if (color > 1) {
-                        removeItem(parent, color);
+                        parent.children[color].style.display = 'none';
+                        parent.children[color - 1].style.display = 'block';
                         color--;
                         if (valEnd == 5) {
-                            personSkin.style.backgroundImage = 'url(../img/skin/skin-' + (color + 3) + '.png)';
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + (color + 3) + '.png)';
                         } else {
-                            personSkin.style.backgroundImage = 'url(../img/skin/skin-' + color + '.png)';
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + color + '.png)';
                         }
+                    } else if (color == 1) {
+                        parent.children[color].style.display = 'none';
+                        color = 3;
+                        parent.children[color].style.display = 'block';
 
+                        if (valEnd == 5) {
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + (color + 3) + '.png)';
+                        } else {
+                            personSkin.style.backgroundImage =
+                                'url(../img/skin/skin-' + color + '.png)';
+                        }
                     }
                     break;
                 case 1:
-                    if (hair > valStart) {
-                        removeItem(parent, hair);
-                        hair--;
-                        personHair.style.backgroundImage = 'url(../img/hair/construct/hair-' + hair + '.png)';
+                    if (hair > 1) {
+                        if (valEnd == 5) {
+                            parent.children[(hair + 3)].style.display = 'none';
+                            parent.children[(hair + 3) - 1].style.display = 'block';
+                            hair--;
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
+                        } else {
+                            parent.children[hair].style.display = 'none';
+                            parent.children[hair - 1].style.display = 'block';
+                            hair--;
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + hair + '.png)';
+                        }
+                    } else if (hair == 1) {
+                        if (valEnd == 5) {
+                            parent.children[(hair + 3)].style.display = 'none';
+                            hair = 3;
+                            parent.children[(hair + 3)].style.display = 'block';
+
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + (hair + 3) + '.png)';
+                        } else {
+                            parent.children[hair].style.display = 'none';
+                            hair = 3;
+                            parent.children[hair].style.display = 'block';
+
+
+                            personHair.style.backgroundImage =
+                                'url(../img/hair/construct/hair-' + hair + '.png)';
+                        }
                     }
                     break;
                 case 2:
-                    if (clothes > valStart) {
-                        removeItem(parent, clothes);
-                        clothes--;
-                        personClothes.style.backgroundImage = 'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                    if (clothes > 1) {
+                        if (valEnd == 5) {
+                            parent.children[(clothes + 3)].style.display = 'none';
+                            parent.children[(clothes + 3) - 1].style.display = 'block';
+                            clothes--;
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
+                        } else {
+                            parent.children[clothes].style.display = 'none';
+                            parent.children[clothes - 1].style.display = 'block';
+                            clothes--;
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                        }
+                    } else if (clothes == 1) {
+                        if (valEnd == 5) {
+                            parent.children[(clothes + 3)].style.display = 'none';
+                            clothes = 3;
+                            parent.children[(clothes + 3)].style.display = 'block';
+
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + (clothes + 3) + '.png)';
+                        } else {
+                            parent.children[clothes].style.display = 'none';
+                            clothes = 3;
+                            parent.children[clothes].style.display = 'block';
+
+
+                            personClothes.style.backgroundImage =
+                                'url(../img/clothes/construct/clothes-' + clothes + '.png)';
+                        }
                     }
                     break;
                 default:
@@ -204,52 +351,68 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
 
-
+    /*Собираем данные о кандидате*/
     let ready = document.querySelector('#ready'),
         name = document.querySelector('#name'),
         age = document.querySelector('#age'),
         select = document.querySelector('#select'),
         bio = document.querySelector('#bio'),
         condidateInfo = {
-        	gender: '',
-        	name: '',
+            gender: '',
+            name: '',
             age: '',
             select: '',
             bio: '',
             skinColor: '',
             skinHair: '',
             skinClothes: '',
-            skinShoes: '' 
+            skinShoes: ''
         };
 
-    function showError(elem) {
-        elem.style.cssText = "border: 1px solid red;";
-        elem.setAttribute('placeholder', 'Заполните данное поле!!!');
-    }
+    /*Проверка правильности заполнения полей*/
+    name.addEventListener('keyup', function(event) {
+        if (this.value.search(/[a-zA-Z0-9]/i) + 1) {
+            name.value = '';
+            name.style.cssText = "border: 1px solid red;";
+            name.setAttribute('placeholder', 'Допускается только кирилица!');
+        }
+    });
+    age.addEventListener('keyup', function(event) {
+        if (isNaN(this.value)) {
+            age.value = '';
+            age.style.cssText = "border: 1px solid red;";
+            age.setAttribute('placeholder', 'Допускается только цифры!');
+        }
+    });
 
+    /*Обработчик нажатия кнопки "готово"*/
     ready.addEventListener('click', function() {
-
-
-    	if (name.value != '') {
+        if (name.value != '' && name.value.trim().length > 0) {
             condidateInfo.name = name.value;
         } else {
-            showError(name);
+            name.value = '';
+            name.style.cssText = "border: 1px solid red;";
+            name.setAttribute('placeholder', 'Заполните данное поле!!!');
         }
-        if (age.value != '') {
+        if (age.value != '' && age.value.trim().length > 0 && !isNaN(age.value) && age.value > 0 && age.value < 100) {
             condidateInfo.age = age.value;
         } else {
-            showError(age);
+            age.value = '';
+            age.style.cssText = "border: 1px solid red;";
+            age.setAttribute('placeholder', 'Введены некорректные значения!');
         }
         condidateInfo.select = select.value;
-        if (bio.value != '') {
+        if (bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
             condidateInfo.bio = bio.value;
         } else {
-            showError(bio);
+            bio.value = '';
+            bio.style.cssText = "border: 1px solid red;";
+            bio.setAttribute('placeholder', 'Введите не менее 10 символов!');
         }
-        
+
 
         condidateInfo.gender = document.querySelector('input[type=radio]:checked').value;
-        
+
         condidateInfo.skinColor = personSkin.style.backgroundImage;
         condidateInfo.skinColor = condidateInfo.skinColor.replace(/"/g, '');
 
@@ -258,85 +421,91 @@ window.addEventListener('DOMContentLoaded', function() {
 
         condidateInfo.skinClothes = personClothes.style.backgroundImage;
         condidateInfo.skinClothes = condidateInfo.skinClothes.replace(/"/g, '');
-        
+
         condidateInfo.skinShoes = personShoes.style.backgroundImage;
         condidateInfo.skinShoes = condidateInfo.skinShoes.replace(/"/g, '');
 
-        if (name.value != '' && age.value != '' && bio.value != '') {
-        	
-        	disappear(custom);
-        	appear(main);
 
-        	let newCondidate = document.createElement('div');
-        	newCondidate.classList.add('main-cards-item');
-        	newCondidate.classList.add('rollIn');
-        	document.querySelector('.main-cards').appendChild(newCondidate);
+        /*Перенос информации о кондидате в карточку*/
+        if (name.value != '' && name.value.trim().length > 0 &&
+            age.value != '' && age.value.trim().length > 0 &&
+            !isNaN(age.value) && age.value > 0 && age.value < 100 &&
+            bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
 
-        	let candidateBlock = document.createElement('div');
-        	candidateBlock.classList.add('candidate-block');
-	        	let candidatePhoto = document.createElement('div');
-	        	candidatePhoto.classList.add('photo');
-	        	candidatePhoto.style.position = 'relative';
-	        	candidatePhoto.innerHTML = '<div style="background: ' +
-	        			condidateInfo.skinColor + 'center no-repeat; background-size: cover; '+ 
-	        			'width: 90px; height: 195px; position: absolute; left: 50%; '+
-	        			'transform: translateX(-50%);"></div>'+ 
-	        			'<div style="background: ' +
-	        			condidateInfo.skinHair + 'center no-repeat; background-size: cover; '+ 
-	        			'width: 90px; height: 195px; position: absolute; left: 50%; '+
-	        			'transform: translateX(-50%);"></div>' +
-	        			'<div style="background: ' +
-	        			condidateInfo.skinClothes + 'center no-repeat; background-size: cover; '+ 
-	        			'width: 90px; height: 195px; position: absolute; left: 50%; '+
-	        			'transform: translateX(-50%);"></div>' +
-	        			'<div style="background: ' +
-	        			condidateInfo.skinShoes + 'center no-repeat; background-size: cover; '+ 
-	        			'width: 90px; height: 195px; position: absolute; left: 50%; '+
-	        			'transform: translateX(-50%);"></div>';
-	        	let condidateResult = document.createElement('div');
-	        	condidateResult.classList.add('result');
-	        		
-	        		let condidateResultCount = document.createElement('div');
-	        		condidateResultCount.classList.add('result-count');
-	        		condidateResultCount.textContent = '0%';
-	        		let condidateResultProgress = document.createElement('div');
-	        		condidateResultProgress.classList.add('progress');
-	        		condidateResultProgress.innerHTML = '<div class="progress-bar progress-bar-3"></div>';
-	        		
-	        		condidateResult.appendChild(condidateResultCount);
-	        		condidateResult.appendChild(condidateResultProgress);
-	        	
+            disappear(custom);
+            appear(main);
 
-	        	candidateBlock.appendChild(candidatePhoto);
-	        	candidateBlock.appendChild(condidateResult);
+            /*Формирование карточки кандидата*/
+            let newCondidate = document.createElement('div');
+            newCondidate.classList.add('main-cards-item');
+            newCondidate.classList.add('rollIn');
+            document.querySelector('.main-cards').appendChild(newCondidate);
+
+            let candidateBlock = document.createElement('div');
+            candidateBlock.classList.add('candidate-block');
+            let candidatePhoto = document.createElement('div');
+            candidatePhoto.classList.add('photo');
+            candidatePhoto.style.position = 'relative';
+            candidatePhoto.innerHTML = '<div style="background: ' +
+                condidateInfo.skinColor + 'center no-repeat; background-size: cover; ' +
+                'width: 90px; height: 195px; position: absolute; left: 50%; ' +
+                'transform: translateX(-50%);"></div>' +
+                '<div style="background: ' +
+                condidateInfo.skinHair + 'center no-repeat; background-size: cover; ' +
+                'width: 90px; height: 195px; position: absolute; left: 50%; ' +
+                'transform: translateX(-50%);"></div>' +
+                '<div style="background: ' +
+                condidateInfo.skinClothes + 'center no-repeat; background-size: cover; ' +
+                'width: 90px; height: 195px; position: absolute; left: 50%; ' +
+                'transform: translateX(-50%);"></div>' +
+                '<div style="background: ' +
+                condidateInfo.skinShoes + 'center no-repeat; background-size: cover; ' +
+                'width: 90px; height: 195px; position: absolute; left: 50%; ' +
+                'transform: translateX(-50%);"></div>';
+            let condidateResult = document.createElement('div');
+            condidateResult.classList.add('result');
+
+            let condidateResultCount = document.createElement('div');
+            condidateResultCount.classList.add('result-count');
+            condidateResultCount.textContent = '0%';
+            let condidateResultProgress = document.createElement('div');
+            condidateResultProgress.classList.add('progress');
+            condidateResultProgress.innerHTML = '<div class="progress-bar progress-bar-3"></div>';
+
+            condidateResult.appendChild(condidateResultCount);
+            condidateResult.appendChild(condidateResultProgress);
 
 
-			let name = document.createElement('div');
-			name.classList.add('name');
-			name.textContent = condidateInfo.name;	        
-			let age = document.createElement('div');
-			age.classList.add('age');
-			age.textContent = condidateInfo.age + ' лет';
-			let sex = document.createElement('div');
-			sex.classList.add('sex');
-			sex.textContent = condidateInfo.gender;
-			let views = document.createElement('div');
-			views.classList.add('views');
-			views.textContent = condidateInfo.select;
-			let bio = document.createElement('div');
-			bio.classList.add('bio');
-			bio.textContent = condidateInfo.bio;
+            candidateBlock.appendChild(candidatePhoto);
+            candidateBlock.appendChild(condidateResult);
 
-        	newCondidate.appendChild(candidateBlock);
 
-        	newCondidate.appendChild(name);
-        	newCondidate.appendChild(age);
-        	newCondidate.appendChild(document.createTextNode('Пол:'));
-        	newCondidate.appendChild(sex);
-        	newCondidate.appendChild(document.createTextNode('Полит. взгляды:'));
-        	newCondidate.appendChild(views);
-        	newCondidate.appendChild(document.createTextNode('Биография'));
-        	newCondidate.appendChild(bio);
+            let name = document.createElement('div');
+            name.classList.add('name');
+            name.textContent = condidateInfo.name;
+            let age = document.createElement('div');
+            age.classList.add('age');
+            age.textContent = condidateInfo.age + ' лет';
+            let sex = document.createElement('div');
+            sex.classList.add('sex');
+            sex.textContent = condidateInfo.gender;
+            let views = document.createElement('div');
+            views.classList.add('views');
+            views.textContent = condidateInfo.select;
+            let bio = document.createElement('div');
+            bio.classList.add('bio');
+            bio.textContent = condidateInfo.bio;
+
+            newCondidate.appendChild(candidateBlock);
+
+            newCondidate.appendChild(name);
+            newCondidate.appendChild(age);
+            newCondidate.appendChild(document.createTextNode('Пол:'));
+            newCondidate.appendChild(sex);
+            newCondidate.appendChild(document.createTextNode('Полит. взгляды:'));
+            newCondidate.appendChild(views);
+            newCondidate.appendChild(document.createTextNode('Биография'));
+            newCondidate.appendChild(bio);
         }
 
     });
