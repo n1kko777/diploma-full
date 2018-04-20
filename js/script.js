@@ -569,14 +569,13 @@ window.addEventListener('DOMContentLoaded', function() {
     let voting = document.querySelector('#voting');
     
     voting.addEventListener('click', function () {
-        let max = 0;
         for (let i = 0; i < mainCards.length; i++) {
             mainCards[i].classList.remove('main-cards-item-active');
         }
 
-        let rnd = 101;
+        let rnd = 100;
         countValue = 0;
-        rnd = Math.floor(Math.random() * rnd);
+        rnd = Math.floor(Math.random() * rnd) + 1;
         
         numberCount[0].textContent = rnd + '%';
         progressCount[0].style.height = rnd + '%';
@@ -589,7 +588,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         rnd = 100 - rnd;
         
-        rnd = Math.floor(Math.random() * rnd);
+        rnd = Math.floor(Math.random() * rnd) + 1;
 
         numberCount[1].textContent = rnd + '%';
         progressCount[1].style.height = rnd + '%';
@@ -614,19 +613,44 @@ window.addEventListener('DOMContentLoaded', function() {
     let crime = document.querySelector('#crime');
 
     crime.addEventListener('click', function () {
+        for (let i = 0; i < mainCards.length; i++) {
+            mainCards[i].classList.remove('main-cards-item-active');
+        }
+
+        let rnd = 75;
+        countValue = 0;
+        rnd = Math.floor(Math.random() * rnd) + 1;
+        rnd = rnd + 25;
+        numberCount[2].textContent = rnd + '%';
+        progressCount[2].style.height = rnd + '%';
         setTimeout(() => {
           mainCards[2].classList.add('rollIn');
-          if ((countValue + 25) >= 100) {
-            countValue = 100;
-            alert('Поздравляем с победой на Выборах!!');
-            location.reload();
-          } else {
-            countValue = countValue + 25;
-          }
-          numberCount[2].textContent = countValue + '%';
-          progressCount[2].style.height = countValue + '%';
-        }, 300);
+        }, 100);
         mainCards[2].classList.remove('rollIn');
+
+        countValue = rnd;
+
+        rnd = 100 - rnd - 1;
+        
+        rnd = Math.floor(Math.random() * rnd) + 1;
+
+        numberCount[1].textContent = rnd + '%';
+        progressCount[1].style.height = rnd + '%';
+        setTimeout(() => {
+          mainCards[1].classList.add('rollIn');
+        }, 350);
+        mainCards[1].classList.remove('rollIn');
+
+        rnd = 100 - rnd - countValue;
+        countValue = rnd;
+
+        numberCount[0].textContent = rnd + '%';
+        progressCount[0].style.height = rnd + '%';
+        setTimeout(() => {
+          mainCards[0].classList.add('rollIn');
+        }, 500);
+        mainCards[0].classList.remove('rollIn');
+    
     });
 
 });
