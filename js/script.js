@@ -573,7 +573,7 @@ window.addEventListener('DOMContentLoaded', function() {
             mainCards[i].classList.remove('main-cards-item-active');
         }
 
-        let rnd = 99;
+        let rnd = 98;
         countValue = 0;
         rnd = Math.floor(Math.random() * rnd) + 1;
         
@@ -606,8 +606,22 @@ window.addEventListener('DOMContentLoaded', function() {
           mainCards[2].classList.add('rollIn');
         }, 500);
         mainCards[2].classList.remove('rollIn');
-    
+        WhoIsAWinner();
     });
+
+    function WhoIsAWinner() {
+        let max = 0;
+        let pos = 0;
+        for (let i = 0; i < mainCards.length; i++) {
+            mainCards[i].classList.remove('main-cards-item-active');
+            if ( parseInt(progressCount[i].style.height.replace(/%/g, '')) > max ) {
+                max = parseInt(progressCount[i].style.height.replace(/%/g, ''));
+                pos = i;
+            }
+            console.log(max);
+        }
+        mainCards[pos].classList.add('main-cards-item-active');
+    }
 
     /*Вмешаться в выборы*/
     let crime = document.querySelector('#crime');
@@ -650,7 +664,7 @@ window.addEventListener('DOMContentLoaded', function() {
           mainCards[0].classList.add('rollIn');
         }, 500);
         mainCards[0].classList.remove('rollIn');
-    
+        WhoIsAWinner();
     });
 
 });
