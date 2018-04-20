@@ -573,7 +573,7 @@ window.addEventListener('DOMContentLoaded', function() {
             mainCards[i].classList.remove('main-cards-item-active');
         }
 
-        let rnd = 100;
+        let rnd = 99;
         countValue = 0;
         rnd = Math.floor(Math.random() * rnd) + 1;
         
@@ -586,7 +586,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         countValue = rnd;
 
-        rnd = 100 - rnd;
+        rnd = 100 - rnd - 1;
         
         rnd = Math.floor(Math.random() * rnd) + 1;
 
