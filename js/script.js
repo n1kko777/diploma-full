@@ -408,12 +408,12 @@ window.addEventListener('DOMContentLoaded', function() {
             name.style.cssText = "border: 1px solid red;";
             name.setAttribute('placeholder', 'Заполните данное поле!!!');
         }
-        if (age.value != '' && age.value.trim().length > 0 && !isNaN(age.value) && parseInt(age.value) > 18 && parseInt(age.value) < 100) {
+        if (age.value != '' && age.value.trim().length > 0 && !isNaN(age.value) && parseInt(age.value) >= 35 && parseInt(age.value) <= 80) {
             condidateInfo.age = parseInt(age.value);
         } else {
             age.value = '';
             age.style.cssText = "border: 1px solid red;";
-            age.setAttribute('placeholder', 'Введены некорректные значения!');
+            age.setAttribute('placeholder', 'Допустимый возраст: 35-80 лет!');
         }
         condidateInfo.select = select.value;
         if (bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
@@ -443,7 +443,7 @@ window.addEventListener('DOMContentLoaded', function() {
         /*Перенос информации о кондидате в карточку*/
         if (name.value != '' && name.value.trim().length > 0 &&
             age.value != '' && age.value.trim().length > 0 &&
-            !isNaN(age.value) && parseInt(age.value) > 18 && parseInt(age.value) < 100 &&
+            !isNaN(age.value) && parseInt(age.value) >= 35 && parseInt(age.value) <= 80 &&
             bio.value != '' && bio.value.trim().length > 0 && bio.value.length > 10) {
 
             disappear(custom);
@@ -499,7 +499,16 @@ window.addEventListener('DOMContentLoaded', function() {
             name.textContent = condidateInfo.name;
             let age = document.createElement('div');
             age.classList.add('age');
-            age.textContent = condidateInfo.age + ' лет';
+            if ( condidateInfo.age%10 == 1 ) {
+                age.textContent = condidateInfo.age + ' год';    
+            } else if(condidateInfo.age%10 == 2 || 
+                condidateInfo.age%10 == 3 || condidateInfo.age%10 == 4) {
+                age.textContent = condidateInfo.age + ' года';  
+            } 
+                else {
+                age.textContent = condidateInfo.age + ' лет';
+            }
+            
             let sex = document.createElement('div');
             sex.classList.add('sex');
             sex.textContent = condidateInfo.gender;
